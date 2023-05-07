@@ -1,26 +1,27 @@
 {
-  "name": "sovic/symfony-gallery",
-  "description": "Symfony gallery",
-  "keywords": [
-  ],
-  "type": "library",
-  "autoload": {
-    "psr-4": {
-      "Sovic\\Gallery\\": "src/"
+    "name": "sovic/symfony-gallery",
+    "description": "Symfony gallery",
+    "keywords": [
+    ],
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Sovic\\Gallery\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
     },
-    "classmap": [
-      "src/"
-    ]
-  },
-  "require": {
-    "php": "~8.0"
-  },
-  "require-dev": {
-    "roave/security-advisories": "dev-master"
-  },
-  "config": {
-    "allow-plugins": {
-      "composer/package-versions-deprecated": true
+    "require": {
+        "php": "~8.0",
+        "doctrine/orm": "^2.15"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     }
-  }
 }
