@@ -27,13 +27,16 @@ class GalleryHelper
         GalleryItem $item,
         string      $baseUrl = '',
         array       $sizes = [self::SIZE_THUMB, self::SIZE_BIG]
-    ): array
-    {
+    ): array {
         $dir = sprintf('%04d', (int) ($item->getId() / 100));
         $basePath = $baseUrl . '/content/' . $item->getModel() . '/' . $dir;
         $result = [];
         foreach ($sizes as $size) {
             if (!in_array($size, self::SIZES, true)) {
+                continue;
+            }
+            if ($item->getPath() !== null) {
+                $result[$size] = '/gallery/' . $item->getPath();
                 continue;
             }
             if ($size === self::SIZE_FULL) {

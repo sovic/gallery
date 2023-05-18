@@ -2,6 +2,7 @@
 
 namespace Sovic\Gallery\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,7 +26,7 @@ class GalleryItem
     protected int $galleryId;
 
     /**
-     * @ORM\Column(name="file", type="string", length=50, nullable=true, options={"default"=NULL})
+     * @ORM\Column(name="extension", type="string", length=50, nullable=true, options={"default"=NULL})
      */
     protected ?string $extension;
 
@@ -50,12 +51,12 @@ class GalleryItem
     protected ?int $sequence;
 
     /**
-     * @ORM\Column(name="width", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="width", type="integer", nullable=false, options={"default"=0})
      */
     protected int $width = 0;
 
     /**
-     * @ORM\Column(name="height", type="integer", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="height", type="integer", nullable=false, options={"default"=0})
      */
     protected int $height = 0;
 
@@ -70,37 +71,37 @@ class GalleryItem
     protected int $modelId;
 
     /**
-     * @ORM\Column(name="is_processed", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_processed", type="boolean", nullable=false, options={"default"=false})
      */
     protected bool $isProcessed = false;
 
     /**
-     * @ORM\Column(name="is_cover", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_cover", type="boolean", nullable=false, options={"default"=false})
      */
     protected bool $isCover = false;
 
     /**
-     * @ORM\Column(name="is_optimized", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_optimized", type="boolean", nullable=false, options={"default"=false})
      */
     protected bool $isOptimized = false;
 
     /**
-     * @ORM\Column(name="is_temp", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_temp", type="boolean", nullable=false, options={"default"=false})
      */
     protected bool $isTemp = false;
 
     /**
-     * @ORM\Column(name="is_hero", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_hero", type="boolean", nullable=false, options={"default"=false})
      */
     protected bool $isHero = false;
 
     /**
-     * @ORM\Column(name="is_hero_mobile", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_hero_mobile", type="boolean", nullable=false, options={"default"=false})
      */
-    protected bool $isHeroMobile;
+    protected bool $isHeroMobile = false;
 
     /**
-     * @ORM\Column(name="is_meta_image", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_meta_image", type="boolean", nullable=false, options={"default"=false})
      */
     protected bool $isMetaImage = false;
 
@@ -109,6 +110,16 @@ class GalleryItem
      * @ORM\JoinColumn(name="gallery_id", referencedColumnName="id")
      */
     protected Gallery $gallery;
+
+    /**
+     * @ORM\Column(name="create_date", type="datetime_immutable", nullable=false)
+     */
+    protected DateTimeImmutable $createDate;
+
+    /**
+     * @ORM\Column(name="path", type="string", length=255, nullable=true, options={"default"=NULL})
+     */
+    protected ?string $path = null;
 
     public function getId(): int
     {
@@ -288,5 +299,30 @@ class GalleryItem
     public function getGallery(): Gallery
     {
         return $this->gallery;
+    }
+
+    public function setGallery(Gallery $gallery): void
+    {
+        $this->gallery = $gallery;
+    }
+
+    public function getCreateDate(): DateTimeImmutable
+    {
+        return $this->createDate;
+    }
+
+    public function setCreateDate(DateTimeImmutable $createDate): void
+    {
+        $this->createDate = $createDate;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path): void
+    {
+        $this->path = $path;
     }
 }

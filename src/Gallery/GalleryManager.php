@@ -4,6 +4,7 @@ namespace Sovic\Gallery\Gallery;
 
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
+use League\Flysystem\FilesystemAdapter;
 
 final class GalleryManager
 {
@@ -13,6 +14,8 @@ final class GalleryManager
     ];
 
     private EntityManagerInterface $entityManager;
+
+    private FilesystemAdapter $filesystemAdapter;
 
     private string $modelName;
     private int $modelId;
@@ -29,6 +32,11 @@ final class GalleryManager
     public function setEntityManager(EntityManagerInterface $entityManager): void
     {
         $this->entityManager = $entityManager;
+    }
+
+    public function setFilesystemAdapter(FilesystemAdapter $filesystemAdapter): void
+    {
+        $this->filesystemAdapter = $filesystemAdapter;
     }
 
     public function loadGallery(?string $galleryName = null): Gallery
@@ -57,6 +65,7 @@ final class GalleryManager
 
         $gallery = new Gallery($entity);
         $gallery->setEntityManager($this->entityManager);
+        $gallery->setFilesystemAdapter($this->filesystemAdapter);
 
         return $gallery;
     }

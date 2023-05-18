@@ -14,7 +14,8 @@
     },
     "require": {
         "php": "~8.0",
-        "doctrine/orm": "^2.15"
+        "doctrine/orm": "^2.15",
+        "league/flysystem": "^3.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master"
