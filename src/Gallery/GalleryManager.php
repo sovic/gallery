@@ -65,7 +65,9 @@ final class GalleryManager
 
         $gallery = new Gallery($entity);
         $gallery->setEntityManager($this->entityManager);
-        $gallery->setFilesystemAdapter($this->filesystemAdapter);
+        if (isset($this->filesystemAdapter)) {
+            $gallery->setFilesystemAdapter($this->filesystemAdapter);
+        }
 
         return $gallery;
     }

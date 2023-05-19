@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\FilesystemException;
 use League\Flysystem\Visibility;
 use Sovic\Gallery\Entity\Gallery as GalleryEntity;
 use Sovic\Gallery\Entity\GalleryItem;
