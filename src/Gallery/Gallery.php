@@ -3,10 +3,14 @@
 namespace Sovic\Gallery\Gallery;
 
 use DateTimeImmutable;
+use Exception;
+use Imagick;
+use ImagickException;
 use InvalidArgumentException;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemException;
 use League\Flysystem\Visibility;
 use Sovic\Gallery\Entity\Gallery as GalleryEntity;
 use Sovic\Gallery\Entity\GalleryItem;
@@ -165,6 +169,10 @@ class Gallery extends AbstractEntityModel
         return [];
     }
 
+    /**
+     * @throws ImagickException
+     * @throws FilesystemException
+     */
     public function uploadFromPath(string $path): GalleryItem
     {
         if (!file_exists($path)) {
@@ -180,18 +188,12 @@ class Gallery extends AbstractEntityModel
         $item->setModel($this->getEntity()->getModel());
         $item->setModelId($this->getEntity()->getModelId());
 
-//        try {
-//            $image = new Imagick($path);
-//            $width = $image->getImageWidth();
-//            $height = $image->getImageHeight();
-//            $item->setWidth($width);
-//            $item->setHeight($height);
-//        } catch (Exception) {
-//            // no dimensions
-//        }
+        $image = new Imagick($path);
+        $width = $image->getImageWidth();
+        $height = $image->getImageHeight();
+        $item->setWidth($width);
+        $item->setHeight($height);
 
-        $item->setWidth(2048);
-        $item->setHeight(1363);
         $item->setCreateDate(new DateTimeImmutable());
         $item->setIsTemp(true);
 
