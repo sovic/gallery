@@ -5,6 +5,7 @@ namespace Sovic\Gallery\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Exception;
 use Sovic\Gallery\Entity\Gallery;
 use Sovic\Gallery\Entity\GalleryItem;
 
@@ -60,7 +61,12 @@ class GalleryItemRepository extends EntityRepository
         $qb->orderBy('gi.isCover', 'DESC');
         $qb->setMaxResults(1);
 
-        return $qb->getQuery()->getSingleResult();
+        try {
+            return $qb->getQuery()->getSingleResult();
+        } catch (Exception) {
+        }
+
+        return null;
     }
 
     public function findGalleriesCovers(string $model, array $modelIds): array
@@ -78,6 +84,11 @@ class GalleryItemRepository extends EntityRepository
         $qb->andWhere($qb->expr()->orX('gi.isHero = 1', 'gi.isHeroMobile = 1'));
         $qb->setMaxResults(1);
 
-        return $qb->getQuery()->getSingleResult();
+        try {
+            return $qb->getQuery()->getSingleResult();
+        } catch (Exception) {
+        }
+
+        return null;
     }
 }
