@@ -29,20 +29,21 @@ class GalleryHelper
         array       $sizes = [self::SIZE_THUMB, self::SIZE_BIG]
     ): array {
         $dir = sprintf('%04d', (int) ($item->getId() / 100));
-        $basePath = $baseUrl . '/content/' . $item->getModel() . '/' . $dir;
+        $dirUrl = $baseUrl . '/' . $item->getModel() . '/' . $dir;
         $result = [];
         foreach ($sizes as $size) {
             if (!in_array($size, self::SIZES, true)) {
                 continue;
             }
             if ($item->getPath() !== null) {
-                $result[$size] = '/gallery/' . $item->getPath();
+                // TODO variants
+                $result[$size] = $baseUrl . '/' . $item->getPath();
                 continue;
             }
             if ($size === self::SIZE_FULL) {
-                $result[$size] = $basePath . '/' . $item->getId() . '.' . $item->getExtension();
+                $result[$size] = $dirUrl . '/' . $item->getId() . '.' . $item->getExtension();
             } else {
-                $result[$size] = $basePath . '/' . $item->getId() . '_' . $size . '.' . $item->getExtension();
+                $result[$size] = $dirUrl . '/' . $item->getId() . '_' . $size . '.' . $item->getExtension();
             }
         }
 
