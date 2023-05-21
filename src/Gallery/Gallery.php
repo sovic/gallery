@@ -233,4 +233,17 @@ class Gallery extends AbstractEntityModel
 
         return new Filesystem($this->filesystemAdapter, $options);
     }
+
+    /**
+     * @throws FilesystemException
+     */
+    public function delete(): void
+    {
+        $filesystem = $this->getFilesystem();
+        $filesystem->delete($this->getGalleryStoragePath());
+
+        $em = $this->getEntityManager();
+        $em->remove($this->getEntity());
+        $em->flush();
+    }
 }
