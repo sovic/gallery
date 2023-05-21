@@ -41,13 +41,7 @@ final class GalleryManager
 
     public function loadGallery(?string $galleryName = null): Gallery
     {
-        if ($galleryName === null || $galleryName === $this->modelName) {
-            $galleryName = $this->modelName;
-        } else if (!in_array($galleryName, $this->galleries, true)) {
-            $errorMessage = 'invalid gallery name [' . implode('|', $this->galleries) . ']';
-            throw new InvalidArgumentException($errorMessage);
-        }
-
+        $galleryName = $this->validateGalleryName($galleryName);
         $repo = $this->entityManager->getRepository(\Sovic\Gallery\Entity\Gallery::class);
         $entity = $repo->findOneBy(
             [
@@ -57,10 +51,7 @@ final class GalleryManager
             ]
         );
         if ($entity === null) {
-            $entity = new \Sovic\Gallery\Entity\Gallery();
-            $entity->setModel($this->modelName);
-            $entity->setModelId($this->modelId);
-            $entity->setName($galleryName);
+            return $this->createGallery($galleryName);
         }
 
         $gallery = new Gallery($entity);
@@ -70,5 +61,38 @@ final class GalleryManager
         }
 
         return $gallery;
+    }
+
+    public function createGallery(?string $galleryName = null): Gallery
+    {
+        $galleryName = $this->validateGalleryName($galleryName);
+
+        $entity = new \Sovic\Gallery\Entity\Gallery();
+        $entity->setModel($this->modelName);
+        $entity->setModelId($this->modelId);
+        $entity->setName($galleryName);
+
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+
+        $gallery = new Gallery($entity);
+        $gallery->setEntityManager($this->entityManager);
+        if (isset($this->filesystemAdapter)) {
+            $gallery->setFilesystemAdapter($this->filesystemAdapter);
+        }
+
+        return $gallery;
+    }
+
+    private function validateGalleryName(?string $galleryName): string
+    {
+        if ($galleryName === null || $galleryName === $this->modelName) {
+            $galleryName = $this->modelName;
+        } else if (!in_array($galleryName, $this->galleries, true)) {
+            $errorMessage = 'invalid gallery name [' . implode('|', $this->galleries) . ']';
+            throw new InvalidArgumentException($errorMessage);
+        }
+
+        return $galleryName;
     }
 }
