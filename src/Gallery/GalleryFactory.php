@@ -19,4 +19,16 @@ final class GalleryFactory extends EntityModelFactory
             ['id' => $id]
         );
     }
+
+    protected function loadEntityModel(mixed $entity, string $modelClass): mixed
+    {
+        if (null === $entity) {
+            return null;
+        }
+
+        $model = new $modelClass($entity);
+        $model->setEntityManager($this->entityManager);
+
+        return $model;
+    }
 }
