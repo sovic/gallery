@@ -169,6 +169,26 @@ class Gallery extends AbstractEntityModel
     }
 
     /**
+     * @param string $path
+     * @return GalleryItem[]
+     * @throws FilesystemException
+     * @throws ImagickException
+     */
+    public function uploadDirectory(string $path): array
+    {
+        if (!is_dir($path)) {
+            throw new InvalidArgumentException('not a directory');
+        }
+        $files = array_diff(scandir($path), ['.', '..']);
+        $uploadedItems = [];
+        foreach ($files as $file) {
+            $uploadedItems[] = $this->uploadFromPath($path . DIRECTORY_SEPARATOR . $file);
+        }
+
+        return $uploadedItems;
+    }
+
+    /**
      * @throws ImagickException
      * @throws FilesystemException
      */
