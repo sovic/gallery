@@ -3,7 +3,6 @@
 namespace Sovic\Gallery\Gallery;
 
 use DateTimeImmutable;
-use Exception;
 use Imagick;
 use ImagickException;
 use InvalidArgumentException;
@@ -204,13 +203,8 @@ class Gallery extends AbstractEntityModel
         $fileSystemFilename = $item->getId() . ($extension ? '.' . $extension : '');
         $fileSystemPath = $this->getGalleryStoragePath() . DIRECTORY_SEPARATOR . $fileSystemFilename;
 
-        $config = ['public_url' => 'http://localhost/gallery/'];
-        $filesystem = new Filesystem($this->filesystemAdapter, $config);
-        $options = [
-            Config::OPTION_VISIBILITY => Visibility::PUBLIC,
-            Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC,
-        ];
-        $filesystem->write($fileSystemPath, file_get_contents($path), $options);
+        $filesystem = $this->getFilesystem();
+        $filesystem->write($fileSystemPath, file_get_contents($path));
 
         $item->setPath($fileSystemPath);
         $item->setIsTemp(false);
@@ -220,7 +214,7 @@ class Gallery extends AbstractEntityModel
         return $item;
     }
 
-    public function getGalleryStoragePath(): string
+    private function getGalleryStoragePath(): string
     {
         /** @noinspection SpellCheckingInspection */
         $hash = md5($this->getEntity()->getId() . 'T3zmR34Swh4FZAA');
@@ -228,5 +222,15 @@ class Gallery extends AbstractEntityModel
         $path[] = $hash;
 
         return implode(DIRECTORY_SEPARATOR, $path);
+    }
+
+    private function getFilesystem(): Filesystem
+    {
+        $options = [
+            Config::OPTION_VISIBILITY => Visibility::PUBLIC,
+            Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC,
+        ];
+
+        return new Filesystem($this->filesystemAdapter, $options);
     }
 }
