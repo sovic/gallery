@@ -207,6 +207,7 @@ class Gallery extends AbstractEntityModel
         $item->setModel($this->getEntity()->getModel());
         $item->setModelId($this->getEntity()->getModelId());
 
+        // image data
         $image = new Imagick($path);
         $width = $image->getImageWidth();
         $height = $image->getImageHeight();
@@ -215,6 +216,9 @@ class Gallery extends AbstractEntityModel
 
         $item->setCreateDate(new DateTimeImmutable());
         $item->setIsTemp(true);
+        if ($this->getCoverImage() === null) {
+            $item->setIsCover(true);
+        }
 
         $em = $this->getEntityManager();
         $em->persist($item);
