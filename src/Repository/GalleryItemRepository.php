@@ -58,7 +58,8 @@ class GalleryItemRepository extends EntityRepository
     public function findGalleryCoverImage(Gallery $gallery): ?GalleryItem
     {
         $qb = $this->getGalleryQueryBuilder($gallery);
-        $qb->orderBy('gi.isCover', 'DESC');
+        $qb->andWhere('gi.isCover = 1');
+        $qb->orderBy('gi.id', 'DESC');
         $qb->setMaxResults(1);
 
         try {
