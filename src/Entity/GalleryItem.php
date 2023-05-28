@@ -107,7 +107,7 @@ class GalleryItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Gallery", inversedBy="galleryItems")
-     * @ORM\JoinColumn(name="gallery_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="gallery_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Gallery $gallery;
 
