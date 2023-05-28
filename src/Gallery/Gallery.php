@@ -6,11 +6,8 @@ use DateTimeImmutable;
 use Imagick;
 use ImagickException;
 use InvalidArgumentException;
-use League\Flysystem\Config;
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
-use League\Flysystem\Visibility;
+use League\Flysystem\FilesystemOperator;
 use Sovic\Gallery\Entity\Gallery as GalleryEntity;
 use Sovic\Gallery\Entity\GalleryItem;
 use Sovic\Gallery\EntityManager\AbstractEntityModel;
@@ -22,16 +19,16 @@ use Sovic\Gallery\Repository\GalleryItemRepository;
  */
 class Gallery extends AbstractEntityModel
 {
-    private FilesystemAdapter $filesystemAdapter;
+    private FilesystemOperator $filesystemOperator;
 
     public function __construct(GalleryEntity $entity)
     {
         $this->setEntity($entity);
     }
 
-    public function setFilesystemAdapter(FilesystemAdapter $filesystemAdapter): void
+    public function setFilesystemOperator(FilesystemOperator $filesystemOperator): void
     {
-        $this->filesystemAdapter = $filesystemAdapter;
+        $this->filesystemOperator = $filesystemOperator;
     }
 
     public function getCoverImage(): ?array
@@ -227,7 +224,7 @@ class Gallery extends AbstractEntityModel
         $fileSystemFilename = $item->getId() . ($extension ? '.' . $extension : '');
         $fileSystemPath = $this->getGalleryStoragePath() . DIRECTORY_SEPARATOR . $fileSystemFilename;
 
-        $filesystem = $this->getFilesystem();
+        $filesystem = $this->filesystemOperator;
         $filesystem->write($fileSystemPath, file_get_contents($path));
 
         $item->setPath($fileSystemPath);
@@ -248,22 +245,12 @@ class Gallery extends AbstractEntityModel
         return implode(DIRECTORY_SEPARATOR, $path);
     }
 
-    private function getFilesystem(): Filesystem
-    {
-        $options = [
-            Config::OPTION_VISIBILITY => Visibility::PUBLIC,
-            Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC,
-        ];
-
-        return new Filesystem($this->filesystemAdapter, $options);
-    }
-
     /**
      * @throws FilesystemException
      */
     public function delete(): void
     {
-        $filesystem = $this->getFilesystem();
+        $filesystem = $this->filesystemOperator;
         $filesystem->delete($this->getGalleryStoragePath());
 
         $em = $this->getEntityManager();
