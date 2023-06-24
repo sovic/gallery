@@ -6,8 +6,10 @@ use DateTimeImmutable;
 use Imagick;
 use ImagickException;
 use InvalidArgumentException;
+use League\Flysystem\Config;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
+use League\Flysystem\Visibility;
 use Sovic\Gallery\Entity\Gallery as GalleryEntity;
 use Sovic\Gallery\Entity\GalleryItem;
 use Sovic\Gallery\EntityManager\AbstractEntityModel;
@@ -222,9 +224,13 @@ class Gallery extends AbstractEntityModel
         $em->flush();
 
         $fileSystemFilename = $item->getId() . ($extension ? '.' . $extension : '');
-        $fileSystemPath = $this->getGalleryStoragePath() . DIRECTORY_SEPARATOR . $fileSystemFilename;
+        $storagePath = $this->getGalleryStoragePath();
+        $fileSystemPath = $storagePath . DIRECTORY_SEPARATOR . $fileSystemFilename;
 
         $filesystem = $this->filesystemOperator;
+        $filesystem->createDirectory($storagePath, [
+            Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC,
+        ]);
         $filesystem->write($fileSystemPath, file_get_contents($path));
 
         $item->setPath($fileSystemPath);
