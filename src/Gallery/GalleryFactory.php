@@ -2,6 +2,7 @@
 
 namespace Sovic\Gallery\Gallery;
 
+use Sovic\Gallery\Entity\GalleryItem;
 use Sovic\Gallery\EntityManager\EntityModelFactory;
 
 final class GalleryFactory extends EntityModelFactory
@@ -18,6 +19,16 @@ final class GalleryFactory extends EntityModelFactory
             Gallery::class,
             ['id' => $id]
         );
+    }
+
+    public function loadByGalleryItemId(int $galleryItemId): ?Gallery
+    {
+        $galleryItem = $this->entityManager->getRepository(GalleryItem::class)->find($galleryItemId);
+        if (null === $galleryItem) {
+            return null;
+        }
+
+        return $this->loadById($galleryItem->getGallery()->getId());
     }
 
     protected function loadEntityModel(mixed $entity, string $modelClass): mixed
