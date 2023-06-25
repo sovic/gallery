@@ -39,28 +39,15 @@ final class GalleryManager
         $this->filesystemOperator = $filesystemOperator;
     }
 
+    /**
+     * Get gallery, if it doesn't exist, create it.
+     */
     public function loadGallery(?string $galleryName = null): Gallery
     {
         $galleryName = $this->validateGalleryName($galleryName);
-        $repo = $this->entityManager->getRepository(\Sovic\Gallery\Entity\Gallery::class);
-        $entity = $repo->findOneBy(
-            [
-                'model' => $this->modelName,
-                'modelId' => $this->modelId,
-                'name' => $galleryName,
-            ]
-        );
-        if ($entity === null) {
-            return $this->createGallery($galleryName);
-        }
+        $gallery = $this->getGallery($galleryName);
 
-        $gallery = new Gallery($entity);
-        $gallery->setEntityManager($this->entityManager);
-        if (isset($this->filesystemOperator)) {
-            $gallery->setFilesystemOperator($this->filesystemOperator);
-        }
-
-        return $gallery;
+        return $gallery ?? $this->createGallery($galleryName);
     }
 
     public function createGallery(?string $galleryName = null): Gallery
@@ -74,6 +61,30 @@ final class GalleryManager
 
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
+
+        $gallery = new Gallery($entity);
+        $gallery->setEntityManager($this->entityManager);
+        if (isset($this->filesystemOperator)) {
+            $gallery->setFilesystemOperator($this->filesystemOperator);
+        }
+
+        return $gallery;
+    }
+
+    public function getGallery(?string $galleryName = null): ?Gallery
+    {
+        $galleryName = $this->validateGalleryName($galleryName);
+        $repo = $this->entityManager->getRepository(\Sovic\Gallery\Entity\Gallery::class);
+        $entity = $repo->findOneBy(
+            [
+                'model' => $this->modelName,
+                'modelId' => $this->modelId,
+                'name' => $galleryName,
+            ]
+        );
+        if ($entity === null) {
+            return null;
+        }
 
         $gallery = new Gallery($entity);
         $gallery->setEntityManager($this->entityManager);
