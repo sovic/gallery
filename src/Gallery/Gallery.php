@@ -21,6 +21,7 @@ use Sovic\Gallery\Repository\GalleryItemRepository;
  */
 class Gallery extends AbstractEntityModel
 {
+    private array $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     private FilesystemOperator $filesystemOperator;
 
     public function __construct(GalleryEntity $entity)
@@ -208,12 +209,14 @@ class Gallery extends AbstractEntityModel
         $item->setModel($this->getEntity()->getModel());
         $item->setModelId($this->getEntity()->getModelId());
 
-        // image data
-        $image = new Imagick($path);
-        $width = $image->getImageWidth();
-        $height = $image->getImageHeight();
-        $item->setWidth($width);
-        $item->setHeight($height);
+        // image processing
+        if (in_array($extension, $this->imageExtensions, true)) {
+            $image = new Imagick($path);
+            $width = $image->getImageWidth();
+            $height = $image->getImageHeight();
+            $item->setWidth($width);
+            $item->setHeight($height);
+        }
 
         $item->setCreateDate(new DateTimeImmutable());
         $item->setIsTemp(true);
