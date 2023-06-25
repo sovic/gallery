@@ -95,6 +95,28 @@ final class GalleryManager
         return $gallery;
     }
 
+    public function getGalleries(): array
+    {
+        $repo = $this->entityManager->getRepository(\Sovic\Gallery\Entity\Gallery::class);
+        $entities = $repo->findBy(
+            [
+                'model' => $this->modelName,
+                'modelId' => $this->modelId,
+            ]
+        );
+        $galleries = [];
+        foreach ($entities as $entity) {
+            $gallery = new Gallery($entity);
+            $gallery->setEntityManager($this->entityManager);
+            if (isset($this->filesystemOperator)) {
+                $gallery->setFilesystemOperator($this->filesystemOperator);
+            }
+            $galleries[] = $gallery;
+        }
+
+        return $galleries;
+    }
+
     private function validateGalleryName(?string $galleryName): string
     {
         if ($galleryName === null || $galleryName === $this->modelName) {
