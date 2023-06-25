@@ -18,25 +18,33 @@ class GalleryItemRepository extends EntityRepository
             ->from(Gallery::class, 'g')
             ->where('g.model = :model');
         $qb->leftJoin(GalleryItem::class, 'gi', Join::WITH, 'gi.galleryId = g.id');
+
         $qb->setParameter(':model', $gallery->getModel());
-        $qb->andWhere('gi.isTemp = 0');
         $qb->andWhere('g.modelId = :model_id');
         $qb->setParameter(':model_id', $gallery->getModelId());
         $qb->andWhere('g.name = :gallery_name');
         $qb->setParameter(':gallery_name', $gallery->getName());
 
+        $qb->andWhere('gi.isTemp = 0');
+
         return $qb;
     }
 
-    private function getBatchQueryBuilder(string $model, array $modelIds): QueryBuilder
+    private function getBatchQueryBuilder(string $model, array $modelIds, string $galleryName): QueryBuilder
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('gi');
-        $qb->from(GalleryItem::class, 'gi');
-        $qb->andWhere('gi.model = :model');
+        $qb->select('gi')
+            ->from(Gallery::class, 'g')
+            ->where('g.model = :model');
+        $qb->leftJoin(GalleryItem::class, 'gi', Join::WITH, 'gi.galleryId = g.id');
+
+        $qb->andWhere('g.model = :model');
         $qb->setParameter(':model', $model);
-        $qb->andWhere('gi.modelId IN (:model_id)');
+        $qb->andWhere('g.modelId IN (:model_id)');
         $qb->setParameter(':model_id', $modelIds);
+        $qb->andWhere('g.name = :gallery_name');
+        $qb->setParameter(':gallery_name', $galleryName);
+
         $qb->andWhere('gi.isTemp = 0');
 
         return $qb;
@@ -71,9 +79,9 @@ class GalleryItemRepository extends EntityRepository
         return null;
     }
 
-    public function findGalleriesCovers(string $model, array $modelIds): array
+    public function findGalleriesCovers(string $model, array $modelIds, string $galleryName): array
     {
-        $qb = $this->getBatchQueryBuilder($model, $modelIds);
+        $qb = $this->getBatchQueryBuilder($model, $modelIds, $galleryName);
         $qb->andWhere('gi.isCover = 1');
 
         return $qb->getQuery()->getResult();
