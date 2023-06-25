@@ -268,4 +268,28 @@ class Gallery extends AbstractEntityModel
         $em->remove($this->getEntity());
         $em->flush();
     }
+
+    /**
+     * @throws FilesystemException
+     */
+    public function deleteItem(int $id): void
+    {
+        /** @var GalleryItemRepository $repo */
+        $repo = $this->getEntityManager()->getRepository(GalleryItem::class);
+        $item = $repo->findOneBy([
+            'id' => $id,
+            'model' => $this->getEntity()->getModel(),
+            'modelId' => $this->getEntity()->getModelId(),
+        ]);
+        if (!$item) {
+            return;
+        }
+
+        $filesystem = $this->filesystemOperator;
+        $filesystem->delete($item->getPath());
+
+        $em = $this->getEntityManager();
+        $em->remove($item);
+        $em->flush();
+    }
 }
