@@ -45,6 +45,7 @@ class GalleryItemRepository extends EntityRepository
     public function findByGallery(Gallery $gallery, ?int $offset = null, ?int $limit = null): array
     {
         $qb = $this->getGalleryQueryBuilder($gallery);
+        $qb->addOrderBy('gi.sequence', 'ASC');
         if ($offset) {
             $qb->setFirstResult($offset);
         }
