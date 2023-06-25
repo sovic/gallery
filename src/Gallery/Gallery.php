@@ -177,12 +177,12 @@ class Gallery extends AbstractEntityModel
     {
         $uploadedItems = [];
         if (is_file($path)) {
-            $uploadedItems[] = $this->uploadFromPath($path);
+            $uploadedItems[] = $this->handleUploadFromPath($path);
         }
         if (is_dir($path)) {
             $files = array_diff(scandir($path), ['.', '..']);
             foreach ($files as $file) {
-                $uploadedItems[] = $this->uploadFromPath($path . DIRECTORY_SEPARATOR . $file);
+                $uploadedItems[] = $this->handleUploadFromPath($path . DIRECTORY_SEPARATOR . $file);
             }
         }
 
@@ -193,7 +193,7 @@ class Gallery extends AbstractEntityModel
      * @throws ImagickException
      * @throws FilesystemException
      */
-    public function uploadFromPath(string $path): GalleryItem
+    private function handleUploadFromPath(string $path): GalleryItem
     {
         if (!file_exists($path)) {
             throw new InvalidArgumentException('invalid path');
