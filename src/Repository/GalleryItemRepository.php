@@ -64,6 +64,15 @@ class GalleryItemRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function countByGallery(Gallery $gallery): int
+    {
+        $qb = $this->getGalleryQueryBuilder($gallery);
+        $qb->select('COUNT(gi.id)');
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function findGalleryCoverImage(Gallery $gallery): ?GalleryItem
     {
         $qb = $this->getGalleryQueryBuilder($gallery);

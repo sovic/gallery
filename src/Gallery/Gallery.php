@@ -58,6 +58,14 @@ class Gallery extends AbstractEntityModel
         return (new GalleryItemResultSet([$hero]))->toArray()[0];
     }
 
+    public function getItemsCount(): int
+    {
+        /** @var GalleryItemRepository $repo */
+        $repo = $this->getEntityManager()->getRepository(GalleryItem::class);
+
+        return $repo->countByGallery($this->getEntity());
+    }
+
     public function getItems(?int $offset = null, ?int $limit = null): array
     {
         /** @var GalleryItemRepository $repo */
@@ -218,6 +226,7 @@ class Gallery extends AbstractEntityModel
             $item->setHeight($height);
         }
 
+        $item->setSequence($this->getItemsCount() + 1);
         $item->setCreateDate(new DateTimeImmutable());
         $item->setIsTemp(true);
         if ($this->getCoverImage() === null) {
