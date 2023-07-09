@@ -48,7 +48,7 @@ class StorageMigration extends AbstractMigration
             /** @var Gallery[] $galleries */
             $galleries = $this->entityManager->getRepository(Gallery::class)->findBy(
                 [
-                    'processed' => false,
+                    'isProcessed' => false,
                 ],
                 [
                     'id' => 'ASC',
@@ -90,7 +90,7 @@ class StorageMigration extends AbstractMigration
                 $this->entityManager->persist($item);
             }
 
-            $entity->setProcessed(true);
+            $entity->setIsProcessed(true);
             $this->entityManager->persist($entity);
         }
 

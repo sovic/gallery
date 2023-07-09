@@ -33,13 +33,13 @@ class GalleryMigration extends AbstractMigration
             $gallery->setDefaultCoverImage();
         }
 
+        /** @var GalleryItemRepository $galleryItemRepo */
+        $galleryItemRepo = $this->entityManager->getRepository(GalleryItem::class);
+
         $galleries = $this->entityManager->getRepository(Gallery::class)->findAll();
         foreach ($galleries as $entity) {
             $gallery = new \Sovic\Gallery\Gallery\Gallery($entity);
             $gallery->setEntityManager($this->entityManager);
-
-            /** @var GalleryItemRepository $galleryItemRepo */
-            $galleryItemRepo = $this->entityManager->getRepository(GalleryItem::class);
 
             // fix empty model_id items
             $items = $galleryItemRepo->findBy([

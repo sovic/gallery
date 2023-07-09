@@ -57,9 +57,9 @@ class Gallery
     protected ?int $usersId;
 
     /**
-     * @ORM\Column(name="processed", type="boolean", nullable=false, options={"default"="0"})
+     * @ORM\Column(name="is_processed", type="boolean", nullable=false, options={"default"="0"})
      */
-    protected bool $processed = false;
+    protected bool $isProcessed = false;
 
     /**
      * @var GalleryItem[]|PersistentCollection
@@ -133,14 +133,14 @@ class Gallery
         $this->usersId = $usersId;
     }
 
-    public function isProcessed(): bool
+    public function isIsProcessed(): bool
     {
-        return $this->processed;
+        return $this->isProcessed;
     }
 
-    public function setProcessed(bool $processed): void
+    public function setIsProcessed(bool $isProcessed): void
     {
-        $this->processed = $processed;
+        $this->isProcessed = $isProcessed;
     }
 
     public function getGalleryItems(): mixed
