@@ -36,6 +36,11 @@ class GalleryItem
     protected ?string $description;
 
     /**
+     * @ORM\Column(name="filesize", type="integer", nullable=true, options={"default"=NULL})
+     */
+    protected ?int $filesize;
+
+    /**
      * @ORM\Column(name="name", type="string", length=100, nullable=true, options={"default"=NULL})
      */
     protected ?string $name;
@@ -46,14 +51,14 @@ class GalleryItem
     protected ?int $sequence;
 
     /**
-     * @ORM\Column(name="width", type="integer", nullable=false, options={"default"=0})
+     * @ORM\Column(name="width", type="integer", nullable=true, options={"default"=NULL})
      */
-    protected int $width = 0;
+    protected ?int $width = null;
 
     /**
-     * @ORM\Column(name="height", type="integer", nullable=false, options={"default"=0})
+     * @ORM\Column(name="height", type="integer", nullable=true, options={"default"=NULL})
      */
-    protected int $height = 0;
+    protected ?int $height = null;
 
     /**
      * @ORM\Column(name="model", type="string", length=100)
@@ -171,22 +176,22 @@ class GalleryItem
         $this->sequence = $sequence;
     }
 
-    public function getWidth(): int
+    public function getWidth(): ?int
     {
         return $this->width;
     }
 
-    public function setWidth(int $width): void
+    public function setWidth(?int $width): void
     {
         $this->width = $width;
     }
 
-    public function getHeight(): int
+    public function getHeight(): ?int
     {
         return $this->height;
     }
 
-    public function setHeight(int $height): void
+    public function setHeight(?int $height): void
     {
         $this->height = $height;
     }
@@ -309,5 +314,15 @@ class GalleryItem
     public function setPath(?string $path): void
     {
         $this->path = $path;
+    }
+
+    public function getFilesize(): ?int
+    {
+        return $this->filesize;
+    }
+
+    public function setFilesize(?int $filesize): void
+    {
+        $this->filesize = $filesize;
     }
 }

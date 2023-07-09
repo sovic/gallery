@@ -2,6 +2,7 @@
 
 namespace Sovic\Gallery\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -67,6 +68,16 @@ class Gallery
      * @ORM\OneToMany(targetEntity="GalleryItem", mappedBy="gallery", fetch="LAZY")
      */
     protected mixed $galleryItems;
+
+    /**
+     * @ORM\Column(name="path", type="string", length=255, nullable=true, options={"default"=NULL})
+     */
+    protected ?string $path = null;
+
+    /**
+     * @ORM\Column(name="create_date", type="datetime_immutable", nullable=false)
+     */
+    protected DateTimeImmutable $createDate;
 
     public function getId(): int
     {
@@ -146,5 +157,25 @@ class Gallery
     public function getGalleryItems(): mixed
     {
         return $this->galleryItems;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path): void
+    {
+        $this->path = $path;
+    }
+
+    public function getCreateDate(): DateTimeImmutable
+    {
+        return $this->createDate;
+    }
+
+    public function setCreateDate(DateTimeImmutable $createDate): void
+    {
+        $this->createDate = $createDate;
     }
 }
