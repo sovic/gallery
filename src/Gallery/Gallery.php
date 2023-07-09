@@ -255,7 +255,7 @@ class Gallery extends AbstractEntityModel
         return $item;
     }
 
-    private function getGalleryStoragePath(): string
+    public function getGalleryStoragePath(): string
     {
         /** @noinspection SpellCheckingInspection */
         $hash = md5($this->getEntity()->getId() . 'T3zmR34Swh4FZAA'); // TODO config salt
@@ -291,7 +291,11 @@ class Gallery extends AbstractEntityModel
             'modelId' => $this->getEntity()->getModelId(),
         ]);
         if (!$item) {
-            return;
+            // BC, remove after migrations scripts added
+            $item = $repo->find($id);
+            if (!$item) {
+                return;
+            }
         }
 
         $filesystem = $this->filesystemOperator;
