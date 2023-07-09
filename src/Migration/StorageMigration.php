@@ -13,7 +13,7 @@ use Sovic\Gallery\Entity\GalleryItem;
 use Sovic\Gallery\Gallery\GalleryHelper;
 use Sovic\Gallery\Repository\GalleryItemRepository;
 
-class PathMigration extends AbstractMigration
+class StorageMigration extends AbstractMigration
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
