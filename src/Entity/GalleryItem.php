@@ -41,11 +41,6 @@ class GalleryItem
     protected ?string $name;
 
     /**
-     * @ORM\Column(name="timestamp", type="integer", nullable=true, options={"default"=NULL})
-     */
-    protected ?int $timestamp;
-
-    /**
      * @ORM\Column(name="sequence", type="integer", nullable=true, options={"default"=NULL})
      */
     protected ?int $sequence;
@@ -164,16 +159,6 @@ class GalleryItem
     public function setName(?string $name): void
     {
         $this->name = $name;
-    }
-
-    public function getTimestamp(): ?int
-    {
-        return $this->timestamp;
-    }
-
-    public function setTimestamp(?int $timestamp): void
-    {
-        $this->timestamp = $timestamp;
     }
 
     public function getSequence(): ?int
