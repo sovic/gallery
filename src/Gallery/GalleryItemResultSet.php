@@ -30,11 +30,13 @@ class GalleryItemResultSet
             $result = [
                 'id' => $item->getId(),
                 'name' => $item->getName(),
-                'url' => $this->baseUrl . '/dl/' . $item->getId(), // TODO add config with route
+                'extension' => $item->getExtension(),
+                'size' => 0, // TODO $item->getSize(),
+                'url' => $this->baseUrl . '/dl/' . $item->getId(), // TODO add a config with route
                 'model' => $item->getModel(),
                 'model_id' => $item->getModelId(),
                 'is_hero' => $item->isHero(),
-                'is_hero_mobile' => $item->isHeroMobile(),
+                'is_hero_mobile' => $item->isHeroMobile(), // TODO merge with is_hero and use variants / selected area
                 'width' => !empty($item->getWidth()) ? $item->getWidth() : null,
                 'height' => !empty($item->getHeight()) ? $item->getHeight() : null,
             ];
