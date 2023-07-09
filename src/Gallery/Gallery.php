@@ -46,6 +46,16 @@ class Gallery extends AbstractEntityModel
         return (new GalleryItemResultSet([$cover]))->toArray()[0];
     }
 
+    public function getGalleryStoragePath(): string
+    {
+        /** @noinspection SpellCheckingInspection */
+        $hash = md5($this->getEntity()->getId() . 'T3zmR34Swh4FZAA'); // TODO config salt
+        $path = str_split(substr($hash, 0, 6));
+        $path[] = $hash;
+
+        return implode(DIRECTORY_SEPARATOR, $path);
+    }
+
     public function getHeroImage(): ?array
     {
         /** @var GalleryItemRepository $repo */
@@ -292,16 +302,6 @@ class Gallery extends AbstractEntityModel
         $em->flush();
 
         return $item;
-    }
-
-    public function getGalleryStoragePath(): string
-    {
-        /** @noinspection SpellCheckingInspection */
-        $hash = md5($this->getEntity()->getId() . 'T3zmR34Swh4FZAA'); // TODO config salt
-        $path = str_split(substr($hash, 0, 6));
-        $path[] = $hash;
-
-        return implode(DIRECTORY_SEPARATOR, $path);
     }
 
     /**
