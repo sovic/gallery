@@ -2,7 +2,9 @@
 
 namespace Sovic\Gallery\Migration;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionClass;
 use Sovic\Gallery\Entity\Gallery;
 use Sovic\Gallery\Entity\GalleryItem;
 use Sovic\Gallery\Repository\GalleryItemRepository;
@@ -14,6 +16,9 @@ class GalleryMigration extends AbstractMigration
     ) {
     }
 
+    /**
+     * @throws Exception
+     */
     public function migrate(array $options = []): void
     {
         if (empty($options['cover_image_gallery_names'])) {
@@ -53,5 +58,18 @@ class GalleryMigration extends AbstractMigration
             }
         }
         $this->entityManager->flush();
+
+        // update timestamp -> update_date
+        $rc = new ReflectionClass(GalleryItem::class);
+        if ($rc->hasMethod('getTimestamp')) {
+            $sql = '
+                UPDATE gallery_item
+                SET `create_date` = FROM_UNIXTIME(`timestamp`)
+                WHERE `timestamp` IS NOT NULL
+            ';
+            $em = $this->entityManager;
+            $stmt = $em->getConnection()->prepare($sql);
+            $stmt->executeQuery();
+        }
     }
 }
