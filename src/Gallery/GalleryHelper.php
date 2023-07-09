@@ -32,9 +32,6 @@ class GalleryHelper
         $dirUrl = $baseUrl . '/' . $item->getModel() . '/' . $dir;
         $result = [];
         foreach ($sizes as $size) {
-            if (!in_array($size, self::SIZES, true)) {
-                continue;
-            }
             if ($item->getPath() !== null) {
                 // TODO variants
                 $result[$size] = $baseUrl . '/' . $item->getPath();
