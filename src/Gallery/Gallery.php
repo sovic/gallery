@@ -58,6 +58,11 @@ class Gallery extends AbstractEntityModel
         return (new GalleryItemResultSet([$hero]))->toArray()[0];
     }
 
+    public function getId(): int
+    {
+        return $this->getEntity()->getId();
+    }
+
     public function getItemsCount(): int
     {
         /** @var GalleryItemRepository $repo */
@@ -175,6 +180,40 @@ class Gallery extends AbstractEntityModel
 ////        return $results;
 //        return [];
 //    }
+
+
+    public function setCoverImage(GalleryItem $item): void
+    {
+        $item->setIsCover(true);
+        $this->getEntityManager()->persist($item);
+        $this->getEntityManager()->flush();
+    }
+
+    public function setDefaultCoverImage(): void
+    {
+        /** @var GalleryItemRepository $galleryItemRepo */
+        $galleryItemRepo = $this->getEntityManager()->getRepository(GalleryItem::class);
+
+        $items = $galleryItemRepo->findBy([
+            'galleryId' => $this->getId(),
+            'isCover' => true,
+        ]);
+        if (count($items) === 0) {
+            $defaultCover = $galleryItemRepo->findOneBy(
+                [
+                    'galleryId' => $this->getId(),
+                    'extension' => 'jpg',
+                ],
+                [
+                    'width' => 'DESC', // widest first
+                    'id' => 'ASC',
+                ]
+            );
+            if ($defaultCover) {
+                $this->setCoverImage($defaultCover);
+            }
+        }
+    }
 
     /**
      * @param string $path
