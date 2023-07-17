@@ -28,22 +28,22 @@ class GalleryItem
     /**
      * @ORM\Column(name="extension", type="string", length=50, nullable=true, options={"default"=NULL})
      */
-    protected ?string $extension;
+    protected ?string $extension = null;
 
     /**
      * @ORM\Column(name="description", type="text", length=65535, nullable=true, options={"default"=NULL})
      */
-    protected ?string $description;
+    protected ?string $description = null;
 
     /**
      * @ORM\Column(name="filesize", type="integer", nullable=true, options={"default"=NULL})
      */
-    protected ?int $filesize;
+    protected ?int $filesize = null;
 
     /**
      * @ORM\Column(name="name", type="string", length=100, nullable=true, options={"default"=NULL})
      */
-    protected ?string $name;
+    protected ?string $name = null;
 
     /**
      * @ORM\Column(name="sequence", type="integer", nullable=true, options={"default"=NULL})
