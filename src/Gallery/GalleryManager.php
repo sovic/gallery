@@ -2,6 +2,7 @@
 
 namespace Sovic\Gallery\Gallery;
 
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use League\Flysystem\FilesystemOperator;
@@ -58,6 +59,7 @@ final class GalleryManager
         $entity->setModel($this->modelName);
         $entity->setModelId($this->modelId);
         $entity->setName($galleryName);
+        $entity->setCreateDate(new DateTimeImmutable());
 
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
