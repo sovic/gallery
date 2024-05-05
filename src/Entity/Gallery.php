@@ -6,77 +6,48 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
-/**
- * Sovic\Gallery\Entity\Gallery
- *
- * @ORM\Table(
- *     name="gallery",
- *     indexes={
- *         @ORM\Index(name="model_model_id", columns={"model","model_id"}),
- *         @ORM\Index(name="model_model_id_name", columns={"model","model_id","name"})
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'gallery')]
+#[ORM\Index(columns: ['model', 'model_id'], name: 'model_model_id')]
+#[ORM\Index(columns: ['model', 'model_id', 'name'], name: 'model_model_id_name')]
+#[ORM\Entity]
 class Gallery
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    /**
-     * @ORM\Column(name="session_id", type="string", length=32, nullable=true, options={"default"="NULL"})
-     */
+    #[ORM\Column(name: 'session_id', type: 'string', length: 32, nullable: true, options: ['default' => 'NULL'])]
     protected ?string $sessionId;
 
-    /**
-     * @ORM\Column(name="model", type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(name: 'model', type: 'string', length: 100, nullable: false)]
     protected string $model;
 
-    /**
-     * @ORM\Column(name="model_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'model_id', type: 'integer', nullable: false)]
     protected int $modelId;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="timestamp", type="integer", nullable=true, options={"default"="NULL"})
-     */
+    #[ORM\Column(name: 'timestamp', type: 'integer', nullable: true, options: ['default' => 'NULL'])]
     protected ?int $timestamp;
 
-    /**
-     * @ORM\Column(name="users_id", type="integer", nullable=true, options={"default"="NULL"})
-     */
+    #[ORM\Column(name: 'users_id', type: 'integer', nullable: true, options: ['default' => 'NULL'])]
     protected ?int $usersId;
 
-    /**
-     * @ORM\Column(name="is_processed", type="boolean", nullable=false, options={"default"="0"})
-     */
+    #[ORM\Column(name: 'is_processed', type: 'boolean', nullable: false, options: ['default' => '0'])]
     protected bool $isProcessed = false;
 
     /**
      * @var GalleryItem[]|PersistentCollection
-     *
-     * @ORM\OneToMany(targetEntity="GalleryItem", mappedBy="gallery", fetch="LAZY")
      */
+    #[ORM\OneToMany(mappedBy: 'gallery', targetEntity: GalleryItem::class, fetch: 'LAZY')]
     protected mixed $galleryItems;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=true, options={"default"=NULL})
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: true, options: ['default' => null])]
     protected ?string $path = null;
 
-    /**
-     * @ORM\Column(name="create_date", type="datetime_immutable", nullable=false)
-     */
+    #[ORM\Column(name: 'create_date', type: 'datetime_immutable', nullable: false)]
     protected DateTimeImmutable $createDate;
 
     public function getId(): int
