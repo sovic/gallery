@@ -48,7 +48,6 @@ class Gallery extends AbstractEntityModel
 
     public function getGalleryStoragePath(): string
     {
-        /** @noinspection SpellCheckingInspection */
         $hash = md5($this->getEntity()->getId() . 'T3zmR34Swh4FZAA'); // TODO config salt
         $path = str_split(substr($hash, 0, 6));
         $path[] = $hash;

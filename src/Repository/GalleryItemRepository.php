@@ -3,6 +3,8 @@
 namespace Sovic\Gallery\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
@@ -69,8 +71,13 @@ class GalleryItemRepository extends EntityRepository
         $qb = $this->getGalleryQueryBuilder($gallery);
         $qb->select('COUNT(gi.id)');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        try {
+            return (int) $qb->getQuery()->getSingleScalarResult();
+        } catch (NoResultException|NonUniqueResultException) {
+            // TODO log
+
+            return 0;
+        }
     }
 
     public function findGalleryCoverImage(Gallery $gallery): ?GalleryItem

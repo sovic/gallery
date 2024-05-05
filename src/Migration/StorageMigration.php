@@ -16,8 +16,8 @@ use Sovic\Gallery\Repository\GalleryItemRepository;
 class StorageMigration extends AbstractMigration
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private FilesystemOperator     $galleryStorage,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly FilesystemOperator     $galleryStorage,
     ) {
     }
 

@@ -12,7 +12,7 @@ use Sovic\Gallery\Repository\GalleryItemRepository;
 class GalleryMigration extends AbstractMigration
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager
     ) {
     }
 

@@ -5,7 +5,7 @@ namespace Sovic\Gallery\Gallery;
 use Doctrine\ORM\EntityManagerInterface;
 use Sovic\Gallery\Entity\GalleryModelInterface;
 
-class GalleryManagerFactory
+readonly class GalleryManagerFactory
 {
     public function __construct(
         private EntityManagerInterface $entityManager

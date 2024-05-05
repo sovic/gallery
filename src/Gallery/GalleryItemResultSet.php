@@ -11,7 +11,7 @@ class GalleryItemResultSet
     /**
      * @param GalleryItem[] $galleryItems
      */
-    public function __construct(private array $galleryItems)
+    public function __construct(private readonly array $galleryItems)
     {
     }
 

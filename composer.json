@@ -13,7 +13,7 @@
         ]
     },
     "require": {
-        "php": "~8.0",
+        "php": "^8.2",
         "ext-imagick": "*",
         "doctrine/orm": "^2.15",
         "league/flysystem": "^3.0"
