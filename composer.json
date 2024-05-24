@@ -1,6 +1,6 @@
 {
-    "name": "sovic/symfony-gallery",
-    "description": "Symfony gallery",
+    "name": "sovic/gallery",
+    "description": "Gallery",
     "keywords": [
     ],
     "type": "library",
