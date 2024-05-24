@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use League\Flysystem\FilesystemOperator;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class GalleryManager
 {
@@ -27,9 +28,7 @@ final class GalleryManager
         $this->modelId = $modelId;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setEntityManager(EntityManagerInterface $entityManager): void
     {
         $this->entityManager = $entityManager;
