@@ -59,6 +59,7 @@ final class GalleryManager
         $entity->setModelId($this->modelId);
         $entity->setName($galleryName);
         $entity->setCreateDate(new DateTimeImmutable());
+        $entity->setIsDownloadEnabled(true);
 
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
