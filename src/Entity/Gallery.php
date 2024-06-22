@@ -3,52 +3,61 @@
 namespace Sovic\Gallery\Entity;
 
 use DateTimeImmutable;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\PersistentCollection;
 
-#[ORM\Table(name: 'gallery')]
-#[ORM\Index(columns: ['model', 'model_id'], name: 'model_model_id')]
-#[ORM\Index(columns: ['model', 'model_id', 'name'], name: 'model_model_id_name')]
-#[ORM\Entity]
+#[Table(name: 'gallery')]
+#[Index(columns: ['model', 'model_id'], name: 'model_model_id')]
+#[Index(columns: ['model', 'model_id', 'name'], name: 'model_model_id_name')]
+#[Entity]
 class Gallery
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[Column(name: 'id', type: 'integer')]
+    #[Id]
+    #[GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(name: 'session_id', type: 'string', length: 32, nullable: true, options: ['default' => 'NULL'])]
+    #[Column(name: 'session_id', type: 'string', length: 32, nullable: true, options: ['default' => 'NULL'])]
     protected ?string $sessionId;
 
-    #[ORM\Column(name: 'model', type: 'string', length: 100, nullable: false)]
+    #[Column(name: 'model', type: 'string', length: 100, nullable: false)]
     protected string $model;
 
-    #[ORM\Column(name: 'model_id', type: 'integer', nullable: false)]
+    #[Column(name: 'model_id', type: 'integer', nullable: false)]
     protected int $modelId;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false)]
+    #[Column(name: 'name', type: 'string', length: 100, nullable: false)]
     protected string $name;
 
-    #[ORM\Column(name: 'timestamp', type: 'integer', nullable: true, options: ['default' => 'NULL'])]
+    #[Column(name: 'timestamp', type: 'integer', nullable: true, options: ['default' => 'NULL'])]
     protected ?int $timestamp;
 
-    #[ORM\Column(name: 'users_id', type: 'integer', nullable: true, options: ['default' => 'NULL'])]
+    #[Column(name: 'users_id', type: 'integer', nullable: true, options: ['default' => 'NULL'])]
     protected ?int $usersId;
 
-    #[ORM\Column(name: 'is_processed', type: 'boolean', nullable: false, options: ['default' => '0'])]
+    #[Column(name: 'is_processed', type: 'boolean', nullable: false, options: ['default' => '0'])]
     protected bool $isProcessed = false;
 
     /**
      * @var GalleryItem[]|PersistentCollection
      */
-    #[ORM\OneToMany(mappedBy: 'gallery', targetEntity: GalleryItem::class, fetch: 'LAZY')]
+    #[OneToMany(mappedBy: 'gallery', targetEntity: GalleryItem::class, fetch: 'LAZY')]
     protected mixed $galleryItems;
 
-    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: true, options: ['default' => null])]
+    #[Column(name: 'path', type: 'string', length: 255, nullable: true, options: ['default' => null])]
     protected ?string $path = null;
 
-    #[ORM\Column(name: 'create_date', type: 'datetime_immutable', nullable: false)]
+    #[Column(name: 'create_date', type: 'datetime_immutable', nullable: false)]
     protected DateTimeImmutable $createDate;
+
+    #[Column(name: 'is_download_enabled', type: 'boolean', nullable: false, options: ['default' => '0'])]
+    protected bool $isDownloadEnabled = false;
 
     public function getId(): int
     {
@@ -148,5 +157,15 @@ class Gallery
     public function setCreateDate(DateTimeImmutable $createDate): void
     {
         $this->createDate = $createDate;
+    }
+
+    public function isDownloadEnabled(): bool
+    {
+        return $this->isDownloadEnabled;
+    }
+
+    public function setIsDownloadEnabled(bool $isDownloadEnabled): void
+    {
+        $this->isDownloadEnabled = $isDownloadEnabled;
     }
 }

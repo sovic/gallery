@@ -14,6 +14,7 @@ use Sovic\Gallery\Entity\Gallery as GalleryEntity;
 use Sovic\Gallery\Entity\GalleryItem;
 use Sovic\Gallery\EntityManager\AbstractEntityModel;
 use Sovic\Gallery\Repository\GalleryItemRepository;
+use ZipArchive;
 
 /**
  * @property GalleryEntity $entity
@@ -301,6 +302,43 @@ class Gallery extends AbstractEntityModel
         $em->flush();
 
         return $item;
+    }
+
+    /**
+     * @throws FilesystemException
+     */
+    public function createZipArchive(?string $zipPath = null): string
+    {
+        if (!$this->getEntity()->isDownloadEnabled()) {
+            throw new InvalidArgumentException('Download is not enabled');
+        }
+
+        /** @var GalleryItemRepository $repo */
+        $repo = $this->getEntityManager()->getRepository(GalleryItem::class);
+        $items = $repo->findByGallery($this->getEntity());
+
+        $storagePath = $this->getGalleryStoragePath();
+
+        $zip = new ZipArchive();
+        if (!$zipPath) {
+            $zipPath = tempnam(sys_get_temp_dir(), 'gallery');
+        }
+
+        $zip->open($zipPath, ZipArchive::CREATE);
+
+        foreach ($items as $item) {
+            $extension = $item->getExtension();
+            $fileSystemFilename = $item->getId() . ($extension ? '.' . $extension : '');
+            $fileSystemPath = $storagePath . DIRECTORY_SEPARATOR . $fileSystemFilename;
+            $zip->addFromString(
+                $item->getName() . ($extension ? '.' . $extension : ''),
+                $this->filesystemOperator->read($fileSystemPath)
+            );
+        }
+
+        $zip->close();
+
+        return $zipPath;
     }
 
     /**
