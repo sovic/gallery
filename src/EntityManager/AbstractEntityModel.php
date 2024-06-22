@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 abstract class AbstractEntityModel
 {
     private EntityManagerInterface $entityManager;
-    private object $entity;
+    public object $entity;
 
     public function setEntityManager(EntityManagerInterface $entityManager): void
     {
