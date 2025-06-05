@@ -30,6 +30,7 @@ class GalleryItemResultSet
             $result = [
                 'id' => $item->getId(),
                 'name' => $item->getName(),
+                'description' => $item->getDescription(),
                 'extension' => $item->getExtension(),
                 'filesize' => $item->getFilesize(),
                 'url' => $this->baseUrl . '/dl/' . $item->getId(), // TODO add a config with route
