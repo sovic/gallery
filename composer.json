@@ -16,7 +16,7 @@
         "php": "^8.2",
         "ext-imagick": "*",
         "ext-zip": "*",
-        "doctrine/orm": "^2.15",
+        "doctrine/orm": "^3.5",
         "league/flysystem": "^3.0"
     },
     "require-dev": {

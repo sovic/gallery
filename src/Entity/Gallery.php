@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\PersistentCollection;
 
 #[Table(name: 'gallery')]
-#[Index(columns: ['model', 'model_id'], name: 'model_model_id')]
-#[Index(columns: ['model', 'model_id', 'name'], name: 'model_model_id_name')]
+#[Index(name: 'model_model_id', columns: ['model', 'model_id'])]
+#[Index(name: 'model_model_id_name', columns: ['model', 'model_id', 'name'])]
 #[Entity]
 class Gallery
 {
@@ -47,7 +47,7 @@ class Gallery
     /**
      * @var GalleryItem[]|PersistentCollection
      */
-    #[OneToMany(mappedBy: 'gallery', targetEntity: GalleryItem::class, fetch: 'LAZY')]
+    #[OneToMany(targetEntity: GalleryItem::class, mappedBy: 'gallery', fetch: 'LAZY')]
     protected mixed $galleryItems;
 
     #[Column(name: 'path', type: 'string', length: 255, nullable: true, options: ['default' => null])]
